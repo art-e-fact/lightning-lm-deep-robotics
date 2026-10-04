@@ -9,7 +9,7 @@ namespace lightning::loc {
 
 geometry_msgs::msg::TransformStamped LocalizationResult::ToGeoMsg() const {
     geometry_msgs::msg::TransformStamped msg;
-    msg.header.frame_id = "map";
+    msg.header.frame_id = "odom";
     msg.header.stamp = math::FromSec(timestamp_);
     msg.child_frame_id = "base_link";
 
