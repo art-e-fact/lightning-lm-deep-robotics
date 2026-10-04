@@ -26,6 +26,7 @@ cmake -S thirdparty/Pangolin-0.9.3 -B build-pangolin \
 cmake --build build-pangolin --parallel "$jobs"
 cmake --install build-pangolin
 export CMAKE_PREFIX_PATH="$repo_dir/.deps${CMAKE_PREFIX_PATH:+:$CMAKE_PREFIX_PATH}"
-colcon build --base-paths . --packages-select lightning --executor sequential \
+
+colcon --log-base rosbuild/log build --base-paths . --build-base rosbuild/build --install-base rosbuild/install --packages-select lightning --executor sequential \
     --cmake-args -DCMAKE_BUILD_TYPE="$build_type" "${launcher_args[@]}" \
     -DPython3_EXECUTABLE=/usr/bin/python3 -DPYTHON_EXECUTABLE=/usr/bin/python3
