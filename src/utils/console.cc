@@ -280,7 +280,7 @@ Session::Session(const std::string& mode, bool online) : impl_(new Impl) {
     std::filesystem::create_directories(directory);
     directory_ = directory.string();
     google::SetLogDestination(google::INFO, (directory.string() + "/details.").c_str());
-    for (int level = google::WARNING; level <= google::FATAL; ++level) google::SetLogDestination(level, "");
+    for (int level = google::WARNING; level <= google::FATAL; ++level) google::SetLogDestination(static_cast<google::LogSeverity>(level), ""); //google::SetLogDestination(level, "");
     const char* term = std::getenv("TERM");
     out.tty = FLAGS_console == "auto" && isatty(STDERR_FILENO) && term && std::string(term) != "dumb";
     out.verbose = FLAGS_console == "verbose";

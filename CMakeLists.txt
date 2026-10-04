@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(lightning)
+project(lightning VERSION 0.0.0)
 
 # Record the selected ROS distribution so runtime setup uses the same underlay.
 if(NOT "$ENV{ROS_DISTRO}" MATCHES "^(foxy|humble)$")

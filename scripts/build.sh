@@ -7,7 +7,7 @@ case "${ROS_DISTRO:-}" in
     *) echo "Source /opt/ros/foxy/setup.bash (Ubuntu 20.04) or /opt/ros/humble/setup.bash (Ubuntu 22.04) first." >&2; exit 1 ;;
 esac
 build_type=${CMAKE_BUILD_TYPE:-Release}
-jobs=${CMAKE_BUILD_PARALLEL_LEVEL:-$(nproc)}
+jobs=${CMAKE_BUILD_PARALLEL_LEVEL:-$(($(nproc) - 8))} #${CMAKE_BUILD_PARALLEL_LEVEL:-$(nproc)}
 export CMAKE_BUILD_PARALLEL_LEVEL="$jobs"
 export MAKEFLAGS="-j$jobs"
 # Use ccache when available; an explicit launcher (including an empty one) wins.
@@ -22,11 +22,19 @@ unzip -DD -nq thirdparty/Pangolin-0.9.3.zip -d thirdparty
 cmake -S thirdparty/Pangolin-0.9.3 -B build-pangolin \
     -DCMAKE_BUILD_TYPE="$build_type" -DCMAKE_INSTALL_PREFIX="$repo_dir/.deps" \
     -DBUILD_EXAMPLES=OFF -DBUILD_TOOLS=OFF -DBUILD_PANGOLIN_PYTHON=OFF \
-    -DBUILD_PANGOLIN_LIBOPENEXR=OFF "${launcher_args[@]}"
+    -DBUILD_PANGOLIN_LIBOPENEXR=OFF \
+    -DBUILD_PANGOLIN_FFMPEG=OFF \
+    -DBUILD_PANGOLIN_OPENNI=OFF -DBUILD_PANGOLIN_OPENNI2=OFF \
+    -DBUILD_PANGOLIN_V4L=OFF \
+    -DCMAKE_CXX_FLAGS="-Wno-error=maybe-uninitialized" \
+    -DCMAKE_C_FLAGS="-Wno-error=maybe-uninitialized" \
+    "${launcher_args[@]}"
 cmake --build build-pangolin --parallel "$jobs"
 cmake --install build-pangolin
 export CMAKE_PREFIX_PATH="$repo_dir/.deps${CMAKE_PREFIX_PATH:+:$CMAKE_PREFIX_PATH}"
 
-colcon --log-base rosbuild/log build --base-paths . --build-base rosbuild/build --install-base rosbuild/install --packages-select lightning --executor sequential \
+colcon --log-base ../../rosbuild/log build --base-paths . --build-base ../../rosbuild/build --install-base ../../rosbuild/install --packages-select lightning --executor sequential \
     --cmake-args -DCMAKE_BUILD_TYPE="$build_type" "${launcher_args[@]}" \
-    -DPython3_EXECUTABLE=/usr/bin/python3 -DPYTHON_EXECUTABLE=/usr/bin/python3
+    -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON \
+    -DPython3_EXECUTABLE=/usr/bin/python3 -DPYTHON_EXECUTABLE=/usr/bin/python3 \
+    -DCMAKE_CXX_FLAGS="-DGLOG_USE_GLOG_EXPORT"

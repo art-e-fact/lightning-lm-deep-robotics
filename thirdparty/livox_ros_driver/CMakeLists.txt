@@ -1,6 +1,6 @@
 # Copyright (c) 2020 Livox. Message definitions only; sensor driver runs separately.
 cmake_minimum_required(VERSION 3.16)
-project(livox_ros_driver2)
+project(livox_ros_driver2 VERSION 1.0.0)
 find_package(ament_cmake REQUIRED)
 find_package(builtin_interfaces REQUIRED)
 find_package(std_msgs REQUIRED)

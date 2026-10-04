@@ -39,7 +39,7 @@
 #define PCL_VOXEL_GRID_COVARIANCE_IMPL_OMP_H_
 
 #include <pcl/common/common.h>
-#include <pcl/filters/boost.h>
+// #include <pcl/filters/boost.h>
 #include <Eigen/Cholesky>
 #include <Eigen/Dense>
 
