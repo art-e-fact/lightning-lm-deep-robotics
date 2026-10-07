@@ -33,8 +33,14 @@ cmake --build build-pangolin --parallel "$jobs"
 cmake --install build-pangolin
 export CMAKE_PREFIX_PATH="$repo_dir/.deps${CMAKE_PREFIX_PATH:+:$CMAKE_PREFIX_PATH}"
 
+# colcon --log-base ../../rosbuild/log build --base-paths . --build-base ../../rosbuild/build --install-base ../../rosbuild/install --packages-select lightning --executor sequential \
+#     --cmake-args -DCMAKE_BUILD_TYPE="$build_type" "${launcher_args[@]}" \
+#     -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON \
+#     -DPython3_EXECUTABLE=/usr/bin/python3 -DPYTHON_EXECUTABLE=/usr/bin/python3 \
+#     -DCMAKE_CXX_FLAGS="-DGLOG_USE_GLOG_EXPORT"
+
 colcon --log-base ../../rosbuild/log build --base-paths . --build-base ../../rosbuild/build --install-base ../../rosbuild/install --packages-select lightning --executor sequential \
     --cmake-args -DCMAKE_BUILD_TYPE="$build_type" "${launcher_args[@]}" \
     -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON \
-    -DPython3_EXECUTABLE=/usr/bin/python3 -DPYTHON_EXECUTABLE=/usr/bin/python3 \
+    -DPython3_EXECUTABLE=$(command -v python) -DPYTHON_EXECUTABLE=$(command -v python) \
     -DCMAKE_CXX_FLAGS="-DGLOG_USE_GLOG_EXPORT"
